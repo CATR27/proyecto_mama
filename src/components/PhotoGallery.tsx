@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { MOM_DATA, PhotoItem } from "@/data/momData";
-import { Sparkles, Maximize2, X, ChevronLeft, ChevronRight, Calendar, Heart } from "lucide-react";
+import { Sparkles, Maximize2, X, ChevronLeft, ChevronRight, Calendar, Heart, Share2, ZoomIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
 
 export default function PhotoGallery() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todas");
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
+  const [likedPhotos, setLikedPhotos] = useState<Record<string, number>>({});
 
   const categories = ["Todas", "Familia", "Celebraciones", "Sonrisas", "Recuerdos"];
 
@@ -21,25 +23,66 @@ export default function PhotoGallery() {
     ? filteredPhotos.findIndex((p) => p.id === activePhoto.id)
     : -1;
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setActivePhoto(filteredPhotos[currentIndex - 1]);
     } else {
       setActivePhoto(filteredPhotos[filteredPhotos.length - 1]);
     }
-  };
+  }, [currentIndex, filteredPhotos]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < filteredPhotos.length - 1) {
       setActivePhoto(filteredPhotos[currentIndex + 1]);
     } else {
       setActivePhoto(filteredPhotos[0]);
     }
+  }, [currentIndex, filteredPhotos]);
+
+  // Keyboard navigation & Escape key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!activePhoto) return;
+      if (e.key === "Escape") {
+        setActivePhoto(null);
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      }
+    };
+
+    if (activePhoto) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activePhoto, handleNext, handlePrev]);
+
+  const handleHeartPhoto = (e: React.MouseEvent, photoId: string) => {
+    e.stopPropagation();
+    setLikedPhotos((prev) => ({
+      ...prev,
+      [photoId]: (prev[photoId] || 0) + 1,
+    }));
+
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { y: 0.8 },
+      colors: ["#f43f5e", "#fda4af", "#fbbf24"],
+    });
   };
 
   return (
     <section id="galeria" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10">
-      {/* Section Header with Parallax Reveal */}
+      {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -56,8 +99,8 @@ export default function PhotoGallery() {
           Momentos en <span className="gradient-text-rose-vibrant">Retrato</span>
         </h2>
 
-        <p className="text-slate-300 max-w-xl mx-auto text-base sm:text-lg">
-          Desliza para revivir cada recuerdo en un formato vertical editorial de alta definición.
+        <p className="text-slate-300 max-w-xl mx-auto text-base sm:text-lg font-light">
+          Desliza para revivir cada recuerdo en un formato vertical editorial. Toca cualquier foto para abrir el visor interactivo.
         </p>
 
         {/* Filter Pills */}
@@ -82,6 +125,7 @@ export default function PhotoGallery() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
         {filteredPhotos.map((photo, index) => {
           const isOdd = index % 2 !== 0;
+          const likes = likedPhotos[photo.id] || 0;
 
           return (
             <motion.div
@@ -109,7 +153,7 @@ export default function PhotoGallery() {
                 {/* Ambient Cinematic Vignette / Glass Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#09050d] via-[#09050d]/30 to-transparent opacity-85 group-hover:opacity-75 transition-opacity duration-500" />
 
-                {/* Floating Top Category Badge */}
+                {/* Floating Top Category Badge & Zoom Button */}
                 <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
                   <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-[#09050d]/80 text-rose-300 border border-rose-500/30 backdrop-blur-xl shadow-lg">
                     {photo.category}
@@ -120,7 +164,7 @@ export default function PhotoGallery() {
                   </div>
                 </div>
 
-                {/* Bottom Story Content (Pure Photography Aesthetics) */}
+                {/* Bottom Story Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10 z-10 space-y-3">
                   {photo.date && (
                     <div className="flex items-center gap-2 text-xs font-medium text-amber-300/90 tracking-wider uppercase">
@@ -137,9 +181,18 @@ export default function PhotoGallery() {
                     {photo.description}
                   </p>
 
-                  <div className="pt-2 flex items-center gap-2 text-rose-400 text-xs font-semibold tracking-wide">
-                    <Heart className="w-4 h-4 fill-current animate-pulse" />
-                    <span>Toca para ver en pantalla completa</span>
+                  <div className="pt-2 flex items-center justify-between">
+                    <span className="text-rose-400 text-xs font-semibold tracking-wide flex items-center gap-1.5">
+                      <ZoomIn className="w-3.5 h-3.5" />
+                      Ver retrato completo
+                    </span>
+
+                    {likes > 0 && (
+                      <span className="inline-flex items-center gap-1 text-xs text-rose-300 bg-rose-950/60 px-3 py-1 rounded-full border border-rose-500/30">
+                        <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                        {likes}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -148,105 +201,144 @@ export default function PhotoGallery() {
         })}
       </div>
 
-      {/* Lightbox Modal for Full Resolution */}
+      {/* ULTRA-CREATIVE LUXURY CINEMATIC MODAL */}
       <AnimatePresence>
         {activePhoto && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#09050d]/95 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6"
+            onClick={() => setActivePhoto(null)}
+            className="fixed inset-0 z-[100] bg-[#050208]/90 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto cursor-pointer"
           >
-            {/* Close Button */}
-            <button
-              onClick={() => setActivePhoto(null)}
-              className="absolute top-6 right-6 p-3.5 rounded-full bg-white/10 hover:bg-rose-600 text-white transition-all cursor-pointer z-20 border border-white/10 shadow-lg"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Floating Top Bar with Glowing Close & Controls */}
+            <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[120] flex items-center gap-3">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActivePhoto(null);
+                }}
+                className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white font-semibold text-sm shadow-[0_0_25px_rgba(244,63,94,0.6)] border border-rose-400/50 backdrop-blur-xl transition-all cursor-pointer hover:scale-105 active:scale-95"
+              >
+                <span>Cerrar</span>
+                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              </button>
+            </div>
 
-            {/* Previous Button */}
+            {/* Left Nav Button */}
             <button
-              onClick={handlePrev}
-              className="absolute left-6 top-1/2 -translate-y-1/2 p-3.5 rounded-full bg-white/10 hover:bg-rose-600 text-white transition-all cursor-pointer z-20 hidden sm:block border border-white/10 shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePrev();
+              }}
+              className="fixed left-3 sm:left-6 top-1/2 -translate-y-1/2 z-[110] p-4 rounded-full bg-[#160a22]/80 hover:bg-rose-600 text-white transition-all cursor-pointer border border-rose-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] hover:scale-110 active:scale-95 backdrop-blur-xl"
+              title="Anterior (Flecha Izquierda)"
             >
               <ChevronLeft className="w-7 h-7" />
             </button>
 
-            {/* Next Button */}
+            {/* Right Nav Button */}
             <button
-              onClick={handleNext}
-              className="absolute right-6 top-1/2 -translate-y-1/2 p-3.5 rounded-full bg-white/10 hover:bg-rose-600 text-white transition-all cursor-pointer z-20 hidden sm:block border border-white/10 shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNext();
+              }}
+              className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-[110] p-4 rounded-full bg-[#160a22]/80 hover:bg-rose-600 text-white transition-all cursor-pointer border border-rose-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] hover:scale-110 active:scale-95 backdrop-blur-xl"
+              title="Siguiente (Flecha Derecha)"
             >
               <ChevronRight className="w-7 h-7" />
             </button>
 
-            {/* Modal Container */}
+            {/* Modal Body Container (Stop propagation so clicks inside don't close) */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="max-w-5xl w-full bg-[#12071d] rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(244,63,94,0.3)] border border-rose-500/30 flex flex-col md:flex-row max-h-[92vh]"
+              initial={{ scale: 0.92, y: 30, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.92, y: 30, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl w-full bg-[#12071d]/95 rounded-[2.5rem] overflow-hidden shadow-[0_0_90px_rgba(244,63,94,0.35)] border border-rose-500/40 my-auto cursor-default flex flex-col"
             >
-              {/* Image Preview */}
-              <div className="relative flex-1 min-h-[350px] md:min-h-[580px] bg-black flex items-center justify-center">
+              {/* Top Accent Neon Glow Line */}
+              <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-pink-400 to-amber-400 shadow-[0_0_15px_rgba(244,63,94,0.8)]" />
+
+              {/* Main Photo Showcase Area */}
+              <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] max-h-[62vh] bg-[#08030c] flex items-center justify-center overflow-hidden">
                 <Image
                   src={activePhoto.src}
                   alt={activePhoto.title}
                   fill
-                  className="object-contain"
+                  className="object-contain p-2 sm:p-4"
                   unoptimized
                 />
               </div>
 
-              {/* Photo Sidebar */}
-              <div className="w-full md:w-88 p-8 bg-[#160a24] text-white flex flex-col justify-between space-y-6 border-t md:border-t-0 md:border-l border-rose-500/20">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold px-3.5 py-1 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white border border-rose-400/30">
-                      {activePhoto.category}
-                    </span>
-                    {activePhoto.date && (
-                      <span className="text-xs text-slate-400 flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-rose-400" />
-                        {activePhoto.date}
+              {/* Interactive Footer & Story Card inside Modal */}
+              <div className="p-6 sm:p-8 bg-gradient-to-b from-[#160a24] to-[#0d0515] border-t border-rose-500/20 space-y-5">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white border border-rose-400/30">
+                        {activePhoto.category}
                       </span>
-                    )}
+                      {activePhoto.date && (
+                        <span className="text-xs text-amber-300/90 font-medium flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {activePhoto.date}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                      {activePhoto.title}
+                    </h3>
                   </div>
 
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white leading-tight">
-                    {activePhoto.title}
-                  </h3>
-
-                  <p className="text-sm text-slate-300 leading-relaxed font-light">
-                    {activePhoto.description}
-                  </p>
+                  {/* Reaction Button with Hearts / Confetti */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={(e) => handleHeartPhoto(e, activePhoto.id)}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#251034] hover:bg-rose-600/40 text-rose-300 hover:text-white border border-rose-500/40 shadow-lg transition-all cursor-pointer active:scale-95 group"
+                    >
+                      <Heart className="w-5 h-5 fill-rose-500 text-rose-500 group-hover:scale-125 transition-transform" />
+                      <span className="text-sm font-semibold">
+                        {likedPhotos[activePhoto.id] ? `Amado (${likedPhotos[activePhoto.id]})` : "¡Enviar Amor!"}
+                      </span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Navigation Controls inside info on mobile */}
-                <div className="flex items-center justify-between pt-5 border-t border-rose-500/20">
-                  <div className="flex items-center gap-2 text-xs text-rose-300 font-medium">
-                    <Heart className="w-4 h-4 text-rose-500 fill-current" />
-                    <span>
-                      {currentIndex + 1} de {filteredPhotos.length}
-                    </span>
+                <p className="text-sm sm:text-base text-slate-300 font-light leading-relaxed">
+                  {activePhoto.description}
+                </p>
+
+                {/* Mini Thumbnail Navigation Strip */}
+                <div className="pt-3 border-t border-rose-500/15 flex items-center justify-between">
+                  <span className="text-xs text-rose-300 font-medium">
+                    Foto {currentIndex + 1} de {filteredPhotos.length}
+                  </span>
+
+                  <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-[260px] sm:max-w-md">
+                    {filteredPhotos.map((p, idx) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setActivePhoto(p)}
+                        className={`relative w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer ${
+                          p.id === activePhoto.id
+                            ? "border-rose-400 scale-110 shadow-[0_0_12px_rgba(244,63,94,0.7)]"
+                            : "border-transparent opacity-50 hover:opacity-100"
+                        }`}
+                      >
+                        <Image src={p.src} alt={p.title} fill className="object-cover" unoptimized />
+                      </button>
+                    ))}
                   </div>
 
-                  <div className="flex items-center gap-2 sm:hidden">
-                    <button
-                      onClick={handlePrev}
-                      className="p-2.5 rounded-xl bg-[#251238] text-white"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={handleNext}
-                      className="p-2.5 rounded-xl bg-[#251238] text-white"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => setActivePhoto(null)}
+                    className="text-xs text-slate-400 hover:text-rose-300 transition-colors cursor-pointer hidden sm:block"
+                  >
+                    Presiona [Esc] para salir
+                  </button>
                 </div>
               </div>
             </motion.div>
