@@ -3,6 +3,7 @@
 import React from "react";
 import { MOM_DATA } from "@/data/momData";
 import { Heart, Sparkles, Coffee, Smile, BookOpen } from "lucide-react";
+import { motion } from "framer-motion";
 
 const iconMap: Record<string, React.ElementType> = {
   Heart,
@@ -13,27 +14,35 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function MemoryTimeline() {
   return (
-    <section id="timeline" className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <section id="timeline" className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto relative z-10">
       {/* Section Header */}
-      <div className="text-center space-y-4 mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-100 text-rose-700 text-xs font-semibold uppercase tracking-wider">
-          <BookOpen className="w-3.5 h-3.5" />
+      <motion.div
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+        className="text-center space-y-4 mb-20"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#180b24]/90 border border-rose-500/30 text-rose-300 text-xs font-semibold uppercase tracking-wider shadow-lg backdrop-blur-xl">
+          <BookOpen className="w-3.5 h-3.5 text-rose-400" />
           <span>Línea del Tiempo</span>
         </div>
-        <h2 className="font-serif text-3xl sm:text-5xl font-bold text-slate-900">
-          Momentos <span className="gradient-text-rose">Inolvidables</span>
+
+        <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight">
+          Momentos <span className="gradient-text-rose-vibrant">Inolvidables</span>
         </h2>
-        <p className="text-slate-600 max-w-lg mx-auto text-base">
+
+        <p className="text-slate-300 max-w-lg mx-auto text-base">
           Detalles y vivencias que hacen que nuestro camino a tu lado sea una historia maravillosa.
         </p>
-      </div>
+      </motion.div>
 
       {/* Timeline Container */}
       <div className="relative">
-        {/* Central Vertical Line */}
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rose-300 via-pink-400 to-rose-200 -translate-x-1/2" />
+        {/* Central Vertical Neon Line */}
+        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rose-500 via-pink-500 to-amber-500 -translate-x-1/2 shadow-[0_0_15px_rgba(244,63,94,0.8)]" />
 
-        <div className="space-y-12">
+        <div className="space-y-16">
           {MOM_DATA.timeline.map((item, index) => {
             const Icon = iconMap[item.iconName] || Heart;
             const isEven = index % 2 === 0;
@@ -46,39 +55,49 @@ export default function MemoryTimeline() {
                 }`}
               >
                 {/* Node Icon on Line */}
-                <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white border-2 border-rose-500 flex items-center justify-center text-rose-500 shadow-md shadow-rose-200 z-10">
-                  <Icon className="w-5 h-5 fill-rose-50" />
-                </div>
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="absolute left-4 md:left-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-[#12071d] border-2 border-rose-400 flex items-center justify-center text-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.5)] z-10 group"
+                >
+                  <Icon className="w-5 h-5 group-hover:scale-115 transition-transform" />
+                </motion.div>
 
-                {/* Content Card */}
-                <div
+                {/* Content Card with Scroll Reveal */}
+                <motion.div
+                  initial={{ opacity: 0, x: isEven ? 50 : -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.7, delay: index * 0.15 }}
                   className={`ml-12 md:ml-0 md:w-[45%] ${
-                    isEven ? "md:text-right md:pr-8" : "md:pl-8"
+                    isEven ? "md:text-right md:pr-10" : "md:pl-10"
                   }`}
                 >
-                  <div className="glass-card p-6 rounded-2xl space-y-3 glass-card-hover bg-white/90">
+                  <div className="dark-glass-card p-7 rounded-3xl space-y-3 dark-glass-card-hover bg-[#140820]/90">
                     <div
-                      className={`flex items-center gap-2 ${
+                      className={`flex items-center gap-2.5 ${
                         isEven ? "md:justify-end" : "justify-start"
                       }`}
                     >
-                      <span className="px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold">
+                      <span className="px-3.5 py-1 rounded-full bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-bold shadow-inner">
                         {item.year}
                       </span>
-                      <span className="text-xs font-medium text-slate-500">
+                      <span className="text-xs font-medium text-amber-300/80">
                         • {item.tag}
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-xl font-bold text-slate-900">
+                    <h3 className="font-serif text-xl font-bold text-white group-hover:text-rose-300 transition-colors">
                       {item.title}
                     </h3>
 
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <p className="text-sm text-slate-300 leading-relaxed font-normal">
                       {item.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             );
           })}
