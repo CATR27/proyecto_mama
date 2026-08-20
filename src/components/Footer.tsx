@@ -28,16 +28,17 @@ export default function Footer() {
           whileTap={{ scale: 0.95 }}
           onClick={triggerLoveExplosion}
           className="w-18 h-18 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center mx-auto shadow-[0_0_35px_rgba(244,63,94,0.6)] border border-rose-300/40 cursor-pointer group"
+          title="¡Te amo mamá!"
         >
           <Heart className="w-9 h-9 fill-current group-hover:animate-ping" />
         </motion.button>
 
         <div className="space-y-2">
           <h3 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            Te Amamos Infinitamente, Mamá
+            Te Amo Infinitamente, Mamá
           </h3>
-          <p className="text-rose-200/70 text-sm max-w-md mx-auto">
-            Creado para recordarte cada día lo importante, valiosa y amada que eres en nuestras vidas.
+          <p className="text-rose-200/80 text-sm sm:text-base max-w-md mx-auto font-light">
+            Un regalo de tu hijo Carlitos, para recordarte siempre lo inmensamente especial que eres en mi vida.
           </p>
         </div>
 
@@ -53,12 +54,12 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-rose-500/15 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-rose-400" />
-            <span>Proyecto Mami • Celebración & Amor</span>
+          <div className="flex items-center gap-1.5 text-rose-300">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>Para la mejor mamá • De tu hijo Carlitos</span>
           </div>
           <div>
-            <span>Hecho con ❤️ en Next.js, Framer Motion & Tailwind CSS</span>
+            <span className="text-rose-300/90">Con todo mi corazón ❤️</span>
           </div>
         </div>
       </div>

@@ -16,9 +16,9 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Para la Mejor Mamá del Mundo ❤️ | Homenaje Especial",
-  description: "Un espacio lleno de amor, recuerdos inolvidables, fotos y momentos especiales dedicado con todo el corazón a Mamá.",
-  keywords: ["Mamá", "Día de la Madre", "Recuerdos", "Familia", "Homenaje", "Amor"],
-  authors: [{ name: "Con todo nuestro amor" }],
+  description: "Un espacio lleno de amor, recuerdos inolvidables, fotos y momentos especiales dedicado con todo el corazón a mi Mamá, de parte de su hijo Carlitos.",
+  keywords: ["Mamá", "Recuerdos", "Familia", "Homenaje", "Amor", "Carlitos"],
+  authors: [{ name: "Carlitos" }],
 };
 
 export default function RootLayout({

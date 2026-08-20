@@ -59,7 +59,7 @@ export default function Navbar({ isPlayingMusic, toggleMusic }: NavbarProps) {
               Para Mamá
             </span>
             <span className="text-[10px] text-rose-400 font-semibold tracking-widest uppercase">
-              Con Todo Nuestro Amor
+              De tu hijo Carlitos ❤️
             </span>
           </div>
         </a>

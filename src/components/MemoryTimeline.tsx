@@ -33,7 +33,7 @@ export default function MemoryTimeline() {
         </h2>
 
         <p className="text-slate-300 max-w-lg mx-auto text-base">
-          Detalles y vivencias que hacen que nuestro camino a tu lado sea una historia maravillosa.
+          Detalles y recuerdos que hacen que mi camino a tu lado como tu hijo sea la experiencia más hermosa.
         </p>
       </motion.div>
 

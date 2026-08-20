@@ -39,11 +39,11 @@ export default function ReasonsGrid() {
         </div>
 
         <h2 className="font-serif text-3xl sm:text-5xl font-bold text-white tracking-tight">
-          ¿Por qué te <span className="gradient-text-rose-vibrant">Amamos Tanto</span>?
+          ¿Por qué te <span className="gradient-text-rose-vibrant">Amo Tanto</span>?
         </h2>
 
         <p className="text-slate-300 max-w-lg mx-auto text-base">
-          Sobran las razones para celebrarte hoy y cada día de la vida.
+          Sobran las razones por las que eres la persona más importante para mí en esta vida.
         </p>
       </motion.div>
 

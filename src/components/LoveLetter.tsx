@@ -43,7 +43,7 @@ export default function LoveLetter() {
         </h2>
 
         <p className="text-slate-300 max-w-md mx-auto text-base">
-          Haz clic en el sobre para abrir nuestra dedicatoria especial.
+          Haz clic en el sobre para abrir mi dedicatoria especial para ti.
         </p>
       </motion.div>
 
@@ -80,7 +80,7 @@ export default function LoveLetter() {
               </h3>
 
               <p className="text-rose-200/80 text-sm mb-7">
-                Guardado con cariño en este sobre especial
+                De tu hijo Carlitos, con todo mi amor
               </p>
 
               <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold text-sm shadow-lg shadow-rose-900/60 group-hover:shadow-rose-600/50 transition-all border border-rose-400/30">
