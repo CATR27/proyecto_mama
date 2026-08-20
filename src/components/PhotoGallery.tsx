@@ -82,43 +82,26 @@ export default function PhotoGallery() {
 
   return (
     <section id="galeria" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto relative z-10">
-      {/* Section Header */}
+      {/* Section Header with Warm Emotional Message */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8 }}
-        className="text-center space-y-4 mb-20"
+        className="text-center space-y-4 mb-16"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#180b24]/90 border border-rose-500/30 text-rose-300 text-xs font-semibold uppercase tracking-widest shadow-lg shadow-rose-950/60 backdrop-blur-xl">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>Colección Fotográfica</span>
+        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#180b24]/90 border border-rose-500/30 text-rose-300 text-xs sm:text-sm font-semibold tracking-wide shadow-lg shadow-rose-950/60 backdrop-blur-xl">
+          <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-pulse" />
+          <span>Momentos que Llevo en el Alma</span>
         </div>
 
-        <h2 className="font-serif text-4xl sm:text-6xl font-bold text-white tracking-tight">
-          Momentos en <span className="gradient-text-rose-vibrant">Retrato</span>
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">
+          Nuestros Recuerdos <span className="gradient-text-rose-vibrant">Juntos</span>
         </h2>
 
-        <p className="text-slate-300 max-w-xl mx-auto text-base sm:text-lg font-light">
-          Desliza para revivir cada recuerdo en un formato vertical editorial. Toca cualquier foto para abrir el visor interactivo.
+        <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg font-light leading-relaxed">
+          Cada una de estas fotos guarda un pedacito de mi felicidad a tu lado. Gracias por llenar mi vida de sonrisas, abrazos y momentos inolvidables, mami.
         </p>
-
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 pt-4">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all cursor-pointer border ${
-                selectedCategory === category
-                  ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white border-rose-400/60 shadow-lg shadow-rose-900/60 scale-105"
-                  : "bg-[#14081f]/80 text-slate-300 hover:text-white hover:bg-rose-950/40 border-rose-500/20 backdrop-blur-md"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
       </motion.div>
 
       {/* Vertical Cinematic Photo Showcase (Editorial Layout) */}
