@@ -109,6 +109,15 @@ export const MOM_DATA = {
       category: "Familia",
       featured: true,
     },
+    {
+      id: "9",
+      src: "/photos/20230820_160833.jpg",
+      title: "Mamá con sus Hijos y Nietos ❤️",
+      date: "Agosto 2023",
+      description: "Un tesoro inigualable: Mamá rodeada del amor incondicional de todos sus hijos y nietos en un gran recuerdo familiar.",
+      category: "Familia",
+      featured: true,
+    },
   ] as PhotoItem[],
 
   timeline: [
