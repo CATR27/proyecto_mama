@@ -37,8 +37,8 @@ export const MOM_DATA = {
     {
       id: "1",
       src: "/photos/20240505_121408_Original.jpg",
-      title: "Mi Mayor Tesoro ❤️",
-      description: "Eres mi persona favorita en todo el universo. Gracias por existir y por ser la mejor mamá del mundo.",
+      title: "El Abrazo Más Bonito 🤗",
+      description: "No hay lugar en el mundo donde me sienta más seguro, amado y en paz que cuando estoy a tu lado.",
     },
     {
       id: "2",
@@ -49,8 +49,8 @@ export const MOM_DATA = {
     {
       id: "3",
       src: "/photos/64C53401-1D5D-4FD9-BE4F-CFC59987A812.PNG",
-      title: "El Abrazo Más Bonito 🤗",
-      description: "No hay lugar en el mundo donde me sienta más seguro, amado y en paz que cuando estoy a tu lado.",
+      title: "Mi Mayor Tesoro ❤️",
+      description: "Eres mi persona favorita en todo el universo. Gracias por existir y por ser la mejor mamá del mundo.",
     },
     {
       id: "4",
