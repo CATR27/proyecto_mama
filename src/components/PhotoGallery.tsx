@@ -1,43 +1,170 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { MOM_DATA, PhotoItem } from "@/data/momData";
-import { Sparkles, Maximize2, X, ChevronLeft, ChevronRight, Calendar, Heart, Share2, ZoomIn } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Maximize2, X, ChevronLeft, ChevronRight, Calendar, Heart, ZoomIn, Sparkles } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import confetti from "canvas-confetti";
 
+// Dedicated Scroll-Illuminated Photo Component (Illuminates automatically on scroll in mobile/responsive & desktop)
+function ScrollIlluminatedPhoto({
+  photo,
+  index,
+  likes,
+  onOpen,
+}: {
+  photo: PhotoItem;
+  index: number;
+  likes: number;
+  onOpen: () => void;
+}) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll tracking across viewport for automatic illumination on scroll
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start 90%", "end 10%"],
+  });
+
+  // Dynamic illumination values as user scrolls past each photo
+  const scale = useTransform(scrollYProgress, [0, 0.45, 0.55, 1], [0.95, 1.02, 1.02, 0.95]);
+  const brightness = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.5, 0.65, 1],
+    ["brightness(0.85)", "brightness(1.1)", "brightness(1.15)", "brightness(1.1)", "brightness(0.85)"]
+  );
+  const borderAlpha = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.5, 0.65, 1],
+    [
+      "rgba(244, 63, 94, 0.2)",
+      "rgba(244, 63, 94, 0.75)",
+      "rgba(251, 113, 133, 0.9)",
+      "rgba(244, 63, 94, 0.75)",
+      "rgba(244, 63, 94, 0.2)",
+    ]
+  );
+  const boxShadow = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.5, 0.65, 1],
+    [
+      "0 10px 30px -5px rgba(0, 0, 0, 0.5)",
+      "0 0 45px rgba(244, 63, 94, 0.45)",
+      "0 0 65px rgba(244, 63, 94, 0.65)",
+      "0 0 45px rgba(244, 63, 94, 0.45)",
+      "0 10px 30px -5px rgba(0, 0, 0, 0.5)",
+    ]
+  );
+
+  const isOdd = index % 2 !== 0;
+
+  return (
+    <motion.div
+      ref={cardRef}
+      style={{
+        scale,
+        borderColor: borderAlpha,
+        boxShadow,
+      }}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.8, delay: (index % 2) * 0.1 }}
+      onClick={onOpen}
+      className={`group relative rounded-[2.5rem] overflow-hidden cursor-pointer transition-all duration-300 border bg-[#12071d] ${
+        isOdd ? "md:mt-12" : ""
+      }`}
+    >
+      {/* Vertical Image Aspect Ratio (3:4 portrait) with dynamic scroll brightness */}
+      <motion.div
+        style={{ filter: brightness }}
+        className="relative aspect-[3/4] w-full bg-[#0d0515] overflow-hidden"
+      >
+        <Image
+          src={photo.src}
+          alt={photo.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover group-hover:scale-108 transition-transform duration-1000 ease-out"
+          unoptimized
+        />
+
+        {/* Ambient Cinematic Vignette / Glass Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#09050d] via-[#09050d]/25 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />
+
+        {/* Floating Top Category Badge & Zoom Button */}
+        <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
+          <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-[#09050d]/80 text-rose-300 border border-rose-500/40 backdrop-blur-xl shadow-lg">
+            {photo.category}
+          </span>
+
+          <div className="w-11 h-11 rounded-full bg-[#09050d]/75 backdrop-blur-xl border border-white/25 flex items-center justify-center text-white group-hover:bg-rose-600 group-hover:scale-110 transition-all shadow-lg">
+            <Maximize2 className="w-4 h-4 text-rose-200 group-hover:text-white" />
+          </div>
+        </div>
+
+        {/* Bottom Story Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10 z-10 space-y-3">
+          {photo.date && (
+            <div className="flex items-center gap-2 text-xs font-medium text-amber-300/90 tracking-wider uppercase">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{photo.date}</span>
+            </div>
+          )}
+
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white group-hover:text-rose-200 transition-colors drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)] leading-tight">
+            {photo.title}
+          </h3>
+
+          <p className="text-sm text-slate-300/95 leading-relaxed font-light line-clamp-3 group-hover:text-slate-100 transition-colors">
+            {photo.description}
+          </p>
+
+          <div className="pt-2 flex items-center justify-between">
+            <span className="text-rose-400 text-xs font-semibold tracking-wide flex items-center gap-1.5">
+              <ZoomIn className="w-3.5 h-3.5" />
+              Toca para ampliar
+            </span>
+
+            {likes > 0 && (
+              <span className="inline-flex items-center gap-1 text-xs text-rose-300 bg-rose-950/70 px-3 py-1 rounded-full border border-rose-500/40 shadow-sm">
+                <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                {likes}
+              </span>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function PhotoGallery() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("Todas");
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
   const [likedPhotos, setLikedPhotos] = useState<Record<string, number>>({});
 
-  const categories = ["Todas", "Familia", "Celebraciones", "Sonrisas", "Recuerdos"];
-
-  const filteredPhotos =
-    selectedCategory === "Todas"
-      ? MOM_DATA.photos
-      : MOM_DATA.photos.filter((p) => p.category === selectedCategory);
+  const photos = MOM_DATA.photos;
 
   const currentIndex = activePhoto
-    ? filteredPhotos.findIndex((p) => p.id === activePhoto.id)
+    ? photos.findIndex((p) => p.id === activePhoto.id)
     : -1;
 
   const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
-      setActivePhoto(filteredPhotos[currentIndex - 1]);
+      setActivePhoto(photos[currentIndex - 1]);
     } else {
-      setActivePhoto(filteredPhotos[filteredPhotos.length - 1]);
+      setActivePhoto(photos[photos.length - 1]);
     }
-  }, [currentIndex, filteredPhotos]);
+  }, [currentIndex, photos]);
 
   const handleNext = useCallback(() => {
-    if (currentIndex < filteredPhotos.length - 1) {
-      setActivePhoto(filteredPhotos[currentIndex + 1]);
+    if (currentIndex < photos.length - 1) {
+      setActivePhoto(photos[currentIndex + 1]);
     } else {
-      setActivePhoto(filteredPhotos[0]);
+      setActivePhoto(photos[0]);
     }
-  }, [currentIndex, filteredPhotos]);
+  }, [currentIndex, photos]);
 
   // Keyboard navigation & Escape key to close modal
   useEffect(() => {
@@ -104,84 +231,17 @@ export default function PhotoGallery() {
         </p>
       </motion.div>
 
-      {/* Vertical Cinematic Photo Showcase (Editorial Layout) */}
+      {/* Vertical Cinematic Photo Showcase (Scroll-Illuminated on Mobile & Desktop) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
-        {filteredPhotos.map((photo, index) => {
-          const isOdd = index % 2 !== 0;
-          const likes = likedPhotos[photo.id] || 0;
-
-          return (
-            <motion.div
-              key={photo.id}
-              initial={{ opacity: 0, y: 70, scale: 0.96 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, delay: (index % 2) * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => setActivePhoto(photo)}
-              className={`group relative rounded-[2.5rem] overflow-hidden cursor-pointer shadow-2xl transition-all duration-700 hover:shadow-[0_0_50px_rgba(244,63,94,0.4)] border border-rose-500/20 hover:border-rose-400/60 ${
-                isOdd ? "md:mt-12" : ""
-              }`}
-            >
-              {/* Vertical Image Aspect Ratio (3:4 portrait) */}
-              <div className="relative aspect-[3/4] w-full bg-[#0d0515] overflow-hidden">
-                <Image
-                  src={photo.src}
-                  alt={photo.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover group-hover:scale-108 transition-transform duration-1000 ease-out brightness-90 group-hover:brightness-105"
-                  unoptimized
-                />
-
-                {/* Ambient Cinematic Vignette / Glass Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#09050d] via-[#09050d]/30 to-transparent opacity-85 group-hover:opacity-75 transition-opacity duration-500" />
-
-                {/* Floating Top Category Badge & Zoom Button */}
-                <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
-                  <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-[#09050d]/80 text-rose-300 border border-rose-500/30 backdrop-blur-xl shadow-lg">
-                    {photo.category}
-                  </span>
-
-                  <div className="w-11 h-11 rounded-full bg-[#09050d]/70 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-600 group-hover:scale-110 transition-all shadow-lg">
-                    <Maximize2 className="w-4 h-4 text-rose-200 group-hover:text-white" />
-                  </div>
-                </div>
-
-                {/* Bottom Story Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10 z-10 space-y-3">
-                  {photo.date && (
-                    <div className="flex items-center gap-2 text-xs font-medium text-amber-300/90 tracking-wider uppercase">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{photo.date}</span>
-                    </div>
-                  )}
-
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white group-hover:text-rose-200 transition-colors drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)] leading-tight">
-                    {photo.title}
-                  </h3>
-
-                  <p className="text-sm text-slate-300/90 leading-relaxed font-light line-clamp-3 group-hover:text-slate-100 transition-colors">
-                    {photo.description}
-                  </p>
-
-                  <div className="pt-2 flex items-center justify-between">
-                    <span className="text-rose-400 text-xs font-semibold tracking-wide flex items-center gap-1.5">
-                      <ZoomIn className="w-3.5 h-3.5" />
-                      Ver retrato completo
-                    </span>
-
-                    {likes > 0 && (
-                      <span className="inline-flex items-center gap-1 text-xs text-rose-300 bg-rose-950/60 px-3 py-1 rounded-full border border-rose-500/30">
-                        <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
-                        {likes}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+        {photos.map((photo, index) => (
+          <ScrollIlluminatedPhoto
+            key={photo.id}
+            photo={photo}
+            index={index}
+            likes={likedPhotos[photo.id] || 0}
+            onOpen={() => setActivePhoto(photo)}
+          />
+        ))}
       </div>
 
       {/* ULTRA-CREATIVE LUXURY CINEMATIC MODAL */}
@@ -232,7 +292,7 @@ export default function PhotoGallery() {
               <ChevronRight className="w-7 h-7" />
             </button>
 
-            {/* Modal Body Container (Stop propagation so clicks inside don't close) */}
+            {/* Modal Body Container */}
             <motion.div
               initial={{ scale: 0.92, y: 30, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -297,11 +357,11 @@ export default function PhotoGallery() {
                 {/* Mini Thumbnail Navigation Strip */}
                 <div className="pt-3 border-t border-rose-500/15 flex items-center justify-between">
                   <span className="text-xs text-rose-300 font-medium">
-                    Foto {currentIndex + 1} de {filteredPhotos.length}
+                    Foto {currentIndex + 1} de {photos.length}
                   </span>
 
                   <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-[260px] sm:max-w-md">
-                    {filteredPhotos.map((p, idx) => (
+                    {photos.map((p, idx) => (
                       <button
                         key={p.id}
                         onClick={() => setActivePhoto(p)}
