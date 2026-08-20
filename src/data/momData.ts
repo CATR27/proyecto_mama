@@ -3,6 +3,7 @@ export interface PhotoItem {
   src: string;
   title: string;
   description: string;
+  objectPosition?: string;
 }
 
 export interface MemoryTimelineItem {
@@ -51,6 +52,7 @@ export const MOM_DATA = {
       src: "/photos/64C53401-1D5D-4FD9-BE4F-CFC59987A812.PNG",
       title: "Mi Mayor Tesoro ❤️",
       description: "Eres mi persona favorita en todo el universo. Gracias por existir y por ser la mejor mamá del mundo.",
+      objectPosition: "50% 5%",
     },
     {
       id: "4",

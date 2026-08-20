@@ -94,6 +94,7 @@ function ScrollIlluminatedPhoto({
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+          style={{ objectPosition: photo.objectPosition || "center" }}
           unoptimized
         />
 
