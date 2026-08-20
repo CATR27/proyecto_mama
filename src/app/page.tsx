@@ -19,15 +19,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative selection:bg-rose-500/30 selection:text-rose-200 bg-[#09050d] text-slate-100">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden flex flex-col relative selection:bg-rose-500/30 selection:text-rose-200 bg-[#09050d] text-slate-100 touch-pan-y">
       {/* Dynamic Animated Ambient Background with Parallax Orbs & Canvas Particles */}
       <BackgroundEffect />
 
       {/* Sticky Header Navigation */}
       <Navbar isPlayingMusic={isPlayingMusic} toggleMusic={toggleMusic} />
 
-      {/* Main Content Sections with Parallax & Scroll Reveal */}
-      <main className="flex-grow space-y-16 sm:space-y-24 relative z-10">
+      {/* Main Content Sections with Parallax & Scroll Reveal (Strictly Vertical) */}
+      <main className="flex-grow w-full max-w-full overflow-x-hidden space-y-16 sm:space-y-24 relative z-10">
         <HeroHeader />
         <PhotoGallery />
         <MemoryTimeline />

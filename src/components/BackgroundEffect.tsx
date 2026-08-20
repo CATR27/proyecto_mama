@@ -6,11 +6,11 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 export default function BackgroundEffect() {
   const { scrollY } = useScroll();
 
-  // Smooth springs for buttery parallax movement across all devices
+  // Smooth springs strictly on vertical Y axis only
   const smoothScrollY = useSpring(scrollY, { stiffness: 70, damping: 20 });
-  const y1 = useTransform(smoothScrollY, [0, 2000], [0, 180]);
-  const y2 = useTransform(smoothScrollY, [0, 2000], [0, -140]);
-  const y3 = useTransform(smoothScrollY, [0, 2000], [0, 120]);
+  const y1 = useTransform(smoothScrollY, [0, 2000], [0, 150]);
+  const y2 = useTransform(smoothScrollY, [0, 2000], [0, -100]);
+  const y3 = useTransform(smoothScrollY, [0, 2000], [0, 100]);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -32,9 +32,9 @@ export default function BackgroundEffect() {
 
     window.addEventListener("resize", handleResize, { passive: true });
 
-    // Adaptive particle count for ultra-smooth mobile & desktop rendering
+    // Adaptive particle count
     const isMobile = width < 768;
-    const particleCount = isMobile ? 24 : 45;
+    const particleCount = isMobile ? 20 : 40;
     const particles: Array<{
       x: number;
       y: number;
@@ -60,7 +60,7 @@ export default function BackgroundEffect() {
         y: Math.random() * height,
         size: Math.random() * 2 + 1,
         speedY: -(Math.random() * 0.35 + 0.1),
-        speedX: (Math.random() - 0.5) * 0.15,
+        speedX: (Math.random() - 0.5) * 0.1,
         opacity: Math.random() * 0.6 + 0.2,
         opacitySpeed: (Math.random() * 0.006 + 0.003) * (Math.random() > 0.5 ? 1 : -1),
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -124,28 +124,28 @@ export default function BackgroundEffect() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden -z-20 transform-gpu">
+    <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden -z-20 max-w-full">
       {/* Deep Obsidian Background */}
-      <div className="absolute inset-0 bg-[#09050d]" />
+      <div className="absolute inset-0 bg-[#09050d] w-full h-full" />
 
-      {/* Moving Ambient Glowing Orbs with Smooth Parallax */}
+      {/* Moving Ambient Glowing Orbs with strictly vertical Y parallax */}
       <motion.div
         style={{ y: y1 }}
-        className="absolute -top-[10%] left-[5%] sm:left-[10%] w-[320px] sm:w-[550px] md:w-[650px] h-[320px] sm:h-[550px] md:h-[650px] rounded-full bg-gradient-to-tr from-rose-900/30 via-pink-900/20 to-purple-900/15 blur-[90px] sm:blur-[130px] animate-pulse-glow"
+        className="absolute -top-[10%] left-0 right-0 mx-auto w-[300px] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[500px] md:h-[600px] rounded-full bg-gradient-to-tr from-rose-900/30 via-pink-900/20 to-purple-900/15 blur-[80px] sm:blur-[120px] animate-pulse-glow"
       />
 
       <motion.div
         style={{ y: y2 }}
-        className="absolute top-[35%] right-[-10%] sm:right-[-5%] w-[340px] sm:w-[580px] md:w-[680px] h-[340px] sm:h-[580px] md:h-[680px] rounded-full bg-gradient-to-bl from-rose-950/35 via-amber-900/15 to-pink-950/25 blur-[100px] sm:blur-[140px] animate-pulse-glow"
+        className="absolute top-[35%] right-0 w-[280px] sm:w-[480px] md:w-[550px] h-[280px] sm:h-[480px] md:h-[550px] rounded-full bg-gradient-to-bl from-rose-950/35 via-amber-900/15 to-pink-950/25 blur-[90px] sm:blur-[130px] animate-pulse-glow"
       />
 
       <motion.div
         style={{ y: y3 }}
-        className="absolute top-[70%] left-[-15%] sm:left-[-10%] w-[360px] sm:w-[620px] md:w-[750px] h-[360px] sm:h-[620px] md:h-[750px] rounded-full bg-gradient-to-tr from-purple-950/30 via-rose-900/18 to-fuchsia-950/20 blur-[100px] sm:blur-[150px] animate-pulse-glow"
+        className="absolute top-[70%] left-0 w-[300px] sm:w-[500px] md:w-[600px] h-[300px] sm:h-[500px] md:h-[600px] rounded-full bg-gradient-to-tr from-purple-950/30 via-rose-900/18 to-fuchsia-950/20 blur-[90px] sm:blur-[130px] animate-pulse-glow"
       />
 
       {/* Subtle Mesh Grid Texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(244,63,94,0.05)_1px,transparent_1px)] [background-size:24px_24px] sm:[background-size:32px_32px] opacity-70" />
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(244,63,94,0.05)_1px,transparent_1px)] [background-size:24px_24px] sm:[background-size:32px_32px] opacity-70 w-full h-full" />
 
       {/* Interactive Particle Canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-80" />

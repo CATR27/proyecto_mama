@@ -13,18 +13,22 @@
     --card-hover-border: rgba(244, 63, 94, 0.5);
   }
 
-  body {
+  html, body {
     background-color: #09050d;
     color: #f8fafc;
     min-height: 100vh;
-    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden !important;
+    position: relative;
     scroll-behavior: smooth;
+    touch-action: pan-y;
   }
 }
 
 /* Custom Dark Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #09050d;
@@ -32,7 +36,6 @@
 ::-webkit-scrollbar-thumb {
   background: #be123c;
   border-radius: 9999px;
-  border: 2px solid #09050d;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #f43f5e;
@@ -51,7 +54,7 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dark-glass-card-hover:hover {
-  transform: translateY(-6px) scale(1.015);
+  transform: translateY(-4px);
   background: rgba(26, 14, 38, 0.75);
   border-color: rgba(244, 63, 94, 0.5);
   box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px 2px rgba(244, 63, 94, 0.25);
@@ -70,47 +73,16 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Ambient Moving Aurora / Mesh Animation */
-@keyframes aurora {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-aurora {
-  background-size: 200% 200%;
-  animation: aurora 15s ease infinite;
-}
-
-/* Floating animation */
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-16px) rotate(3deg);
-  }
-}
-
+/* Floating & Glow Animations (Strictly Vertical / In-Place) */
 @keyframes pulseGlow {
   0%, 100% {
     opacity: 0.35;
     transform: scale(1);
   }
   50% {
-    opacity: 0.65;
-    transform: scale(1.1);
+    opacity: 0.6;
+    transform: scale(1.05);
   }
-}
-
-.animate-float-slow {
-  animation: floatSlow 8s ease-in-out infinite;
 }
 
 .animate-pulse-glow {
