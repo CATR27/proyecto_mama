@@ -113,38 +113,6 @@ export default function HeroHeader() {
           {MOM_DATA.header.subtitle}
         </motion.p>
 
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 pt-2 sm:pt-4 px-4"
-        >
-          <a
-            href="#galeria"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 text-white rounded-2xl font-semibold text-sm sm:text-base shadow-xl shadow-rose-900/50 hover:shadow-rose-600/60 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer border border-rose-400/30 group"
-          >
-            <Image className="w-4 sm:w-5 h-4 sm:h-5 group-hover:scale-110 transition-transform" />
-            <span>Nuestros Recuerdos</span>
-          </a>
-
-          <a
-            href="#carta"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 bg-[#1a0c28]/80 hover:bg-[#251038] text-rose-200 border border-rose-500/30 rounded-2xl font-semibold text-sm sm:text-base shadow-lg hover:shadow-rose-900/40 hover:-translate-y-0.5 transition-all cursor-pointer backdrop-blur-xl"
-          >
-            <Mail className="w-4 sm:w-5 h-4 sm:h-5 text-rose-400" />
-            <span>Leer Mi Carta Especial</span>
-          </a>
-
-          <button
-            onClick={triggerConfetti}
-            title="¡Enviar amor!"
-            className="p-3.5 sm:p-4 bg-[#1f0d30]/90 hover:bg-rose-500/30 text-rose-400 hover:text-rose-200 rounded-2xl border border-rose-500/40 transition-all active:scale-95 cursor-pointer shadow-lg shadow-rose-950/50 group"
-          >
-            <Heart className="w-5 sm:w-6 h-5 sm:h-6 fill-rose-500 group-hover:scale-125 transition-transform" />
-          </button>
-        </motion.div>
-
         {/* Stats Grid with Parallax and Glowing Borders */}
         <motion.div
           style={{ y: yStats }}
