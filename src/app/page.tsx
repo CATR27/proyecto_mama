@@ -12,7 +12,7 @@ import MusicPlayer from "@/components/MusicPlayer";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+  const [isPlayingMusic, setIsPlayingMusic] = useState(true);
 
   const toggleMusic = () => {
     setIsPlayingMusic((prev) => !prev);
@@ -35,8 +35,12 @@ export default function Home() {
         <ReasonsGrid />
       </main>
 
-      {/* Floating Audio Player */}
-      <MusicPlayer isPlaying={isPlayingMusic} onToggle={toggleMusic} />
+      {/* Floating Audio Player with Autoplay & Interaction Fallback */}
+      <MusicPlayer
+        isPlaying={isPlayingMusic}
+        onToggle={toggleMusic}
+        setIsPlaying={setIsPlayingMusic}
+      />
 
       {/* Footer */}
       <Footer />

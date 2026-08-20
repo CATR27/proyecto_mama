@@ -1,26 +1,69 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Volume2, VolumeX, Music } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface MusicPlayerProps {
   isPlaying: boolean;
   onToggle: () => void;
+  setIsPlaying: (playing: boolean) => void;
 }
 
-export default function MusicPlayer({ isPlaying, onToggle }: MusicPlayerProps) {
+export default function MusicPlayer({ isPlaying, onToggle, setIsPlaying }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Auto-play on page load and fallback on first user interaction (click/scroll/touch)
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.6;
-      if (isPlaying) {
-        audioRef.current.play().catch((err) => {
-          console.log("Audio autoplay restricted:", err);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.volume = 0.65;
+
+    const playAudio = () => {
+      if (!audio) return;
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          cleanupListeners();
+        })
+        .catch(() => {
+          // Browser policy blocked immediate autoplay; listeners will catch first touch/scroll
         });
-      } else {
-        audioRef.current.pause();
-      }
+    };
+
+    const cleanupListeners = () => {
+      window.removeEventListener("click", playAudio);
+      window.removeEventListener("touchstart", playAudio);
+      window.removeEventListener("scroll", playAudio);
+      window.removeEventListener("keydown", playAudio);
+    };
+
+    // 1. Attempt immediate autoplay
+    playAudio();
+
+    // 2. Attach global one-time interaction listeners if blocked
+    window.addEventListener("click", playAudio, { once: true });
+    window.addEventListener("touchstart", playAudio, { once: true });
+    window.addEventListener("scroll", playAudio, { once: true });
+    window.addEventListener("keydown", playAudio, { once: true });
+
+    return () => {
+      cleanupListeners();
+    };
+  }, [setIsPlaying]);
+
+  // Handle manual toggle
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.play().catch((err) => {
+        console.log("Audio play prevented:", err);
+      });
+    } else {
+      audio.pause();
     }
   }, [isPlaying]);
 
@@ -32,6 +75,7 @@ export default function MusicPlayer({ isPlaying, onToggle }: MusicPlayerProps) {
         src="/music.mp3"
         loop
         preload="auto"
+        autoPlay
       />
 
       {/* Floating Ambient Music Control Pill */}
