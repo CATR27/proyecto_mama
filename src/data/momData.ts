@@ -2,10 +2,7 @@ export interface PhotoItem {
   id: string;
   src: string;
   title: string;
-  date?: string;
   description: string;
-  category: 'Familia' | 'Sonrisas' | 'Celebraciones' | 'Recuerdos';
-  featured?: boolean;
 }
 
 export interface MemoryTimelineItem {
@@ -40,83 +37,56 @@ export const MOM_DATA = {
     {
       id: "1",
       src: "/photos/20240505_121408_Original.jpg",
-      title: "Un Día Especial en Familia",
-      date: "Mayo 2024",
-      description: "Celebrando momentos únicos llenos de risas, buena comida y mucho cariño.",
-      category: "Celebraciones",
-      featured: true,
+      title: "Mi Mayor Tesoro ❤️",
+      description: "Eres mi persona favorita en todo el universo. Gracias por existir y por ser la mejor mamá del mundo.",
     },
     {
       id: "2",
       src: "/photos/24F988B9-9FC4-47AA-A20E-191885A78F3D.PNG",
-      title: "Sonrisas que Iluminan todo",
-      date: "Recuerdo Hermoso",
-      description: "Tu alegría contagiosa siempre llena mi corazón de paz y felicidad.",
-      category: "Sonrisas",
-      featured: false,
+      title: "Tu Sonrisa es Mi Luz ✨",
+      description: "Verte sonreír me llena el alma de alegría y me da toda la fuerza para salir adelante todos los días.",
     },
     {
       id: "3",
       src: "/photos/64C53401-1D5D-4FD9-BE4F-CFC59987A812.PNG",
-      title: "Encuentro Inolvidable",
-      date: "Momento Especial",
-      description: "Cada abrazo tuyo me recarga el alma y me recuerda lo afortunado que soy de tenerte como mamá.",
-      category: "Familia",
-      featured: true,
+      title: "El Abrazo Más Bonito 🤗",
+      description: "No hay lugar en el mundo donde me sienta más seguro, amado y en paz que cuando estoy a tu lado.",
     },
     {
       id: "4",
       src: "/photos/7E985EB3-6F70-446B-8C9D-86E105D26D24.PNG",
-      title: "Compartiendo Risas",
-      date: "Un Día Inolvidable",
-      description: "La complicidad y el cariño compartido en cada mirada a tu lado.",
-      category: "Familia",
-      featured: false,
+      title: "Siempre Juntos 💖",
+      description: "Gracias por estar conmigo en cada etapa de mi vida. Eres mi mayor orgullo y mi mayor bendición.",
     },
     {
       id: "5",
       src: "/photos/Archivo_008.png",
-      title: "Tiempos Preciados",
-      date: "Memoria del Corazón",
-      description: "Construyendo recuerdos dorados que guardo conmigo por siempre.",
-      category: "Recuerdos",
-      featured: true,
+      title: "Amor Sin Medida 🌹",
+      description: "Todo lo bueno que soy y lo que sueño lograr te lo debo a ti y al amor tan puro que siempre me has entregado.",
     },
     {
       id: "6",
       src: "/photos/IMG_20190224_141405895_Original.jpg",
-      title: "Paseo de Febrero",
-      date: "Febrero 2019",
-      description: "Disfrutando de una tarde radiante al aire libre contigo.",
-      category: "Recuerdos",
-      featured: false,
+      title: "Mi Guía y Mi Ejemplo 🌟",
+      description: "Admiro tu fuerza, tu enorme corazón y la ternura con la que siempre cuidas de mí.",
     },
     {
       id: "7",
       src: "/photos/IMG_7291.PNG",
-      title: "Instantánea de Amor",
-      date: "Momento Favorito",
-      description: "Guardo en el corazón cada uno de estos instantes a tu lado.",
-      category: "Sonrisas",
-      featured: true,
+      title: "Para Siempre en Mi Corazón 💕",
+      description: "Te amo con toda mi alma, mami. Hoy, mañana y por todos los días de mi vida.",
     },
     {
       id: "8",
       src: "/photos/IMG_6855.jpg",
-      title: "Toda la Familia Unida ❤️",
-      date: "Recuerdo Especial de Familia",
-      description: "Un momento inolvidable con toda la familia reunida, pero celebrándote siempre a ti, mami.",
-      category: "Familia",
-      featured: true,
+      title: "La Reina de Mi Vida 👑",
+      description: "Eres el corazón que une a toda la familia y la mujer que más amo y respeto en este planeta.",
     },
     {
       id: "9",
       src: "/photos/20230820_160833.jpg",
-      title: "Mamá con sus Hijos y Nietos ❤️",
-      date: "Agosto 2023",
-      description: "Un tesoro inigualable: Verte feliz y rodeada de todos los que tanto te amamos.",
-      category: "Familia",
-      featured: true,
+      title: "Verte Feliz es Mi Mayor Alegría 💐",
+      description: "Mi mayor deseo en esta vida siempre será verte sonreír y hacerte sentir tan amada como tú me haces sentir a mí.",
     },
   ] as PhotoItem[],
 
