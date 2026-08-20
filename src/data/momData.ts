@@ -100,6 +100,15 @@ export const MOM_DATA = {
       category: "Sonrisas",
       featured: true,
     },
+    {
+      id: "8",
+      src: "/photos/IMG_6855.jpg",
+      title: "Toda la Familia Unida ❤️",
+      date: "Recuerdo Especial de Familia",
+      description: "Un momento inolvidable con toda la familia reunida, llena de amor, risas y la mejor compañía.",
+      category: "Familia",
+      featured: true,
+    },
   ] as PhotoItem[],
 
   timeline: [
