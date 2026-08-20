@@ -165,11 +165,13 @@ export const MOM_DATA = {
   ] as LoveReason[],
 
   letter: {
-    salutation: "Querida Mamá,",
+    salutation: "Querida Mamá ❤️,",
     paragraphs: [
-      "Hoy quiero hacer una pausa para agradecerte desde el fondo de mi corazón todo lo que has hecho y sigues haciendo por mí. A veces los días pasan tan rápido que olvido decirte lo inmensamente importante y especial que eres en mi vida.",
-      "Eres mi mayor orgullo, mi puerto seguro y mi ejemplo más grande de amor y perseverancia. Cada paso que doy y cada meta que alcanzo llevan la huella de tus sacrificios, tus enseñanzas y tu fe infinita en mí.",
-      "Hice este rincón especial solo para ti, para recordarte siempre lo mucho que te amo, te admiro y te agradezco ser mi mamá. ¡Te amo con todo mi corazón!"
+      "Hoy quiero hacer una pausa en el tiempo para agradecerte, desde lo más profundo de mi corazón, todo lo que has hecho y sigues haciendo por mí. Gracias por ser mi mamá y por ser la persona que más amo en esta vida. Sé que no me alcanzará la vida entera para pagarte todo el amor infinito, la entrega y los sacrificios que siempre me has brindado.",
+      "Hoy que es tu cumpleaños, quisiera con toda el alma que el tiempo se detuviera, porque mi mayor deseo es tenerte conmigo por el resto de mi vida. Eres la luz que ilumina mi camino cuando hay oscuridad, la voz que me llena de fuerza para seguir adelante y mi lugar más seguro en este mundo.",
+      "Le doy infinitas gracias a Dios por bendecirme con una mamá tan hermosa, buena y perfecta. A veces, en la rutina, se me olvida dimensionar el regalo tan inmenso que tengo y lo profundamente afortunado que soy de ser tu hijo.",
+      "Te escribo estas palabras con el corazón en la mano y lágrimas en los ojos, porque me pongo triste al no poder estar hoy contigo abrazándote como quisiera, pero quiero que sientas mi amor a través de cada letra.",
+      "Te amo con toda mi alma y te amaré siempre. ¡Feliz Cumpleaños, Mamá hermosa!"
     ],
     closing: "Con todo mi amor y gratitud siempre,",
     signature: "Tu hijo Carlitos ❤️"
